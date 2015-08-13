@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="r0457206_DreamJournal_TestApp" default="all" basedir=".">
+    <property name="app.name" value="${project.name}" />
+    
+    <property name="lib.dir" location="/Applications/SO/jar" />
+    <property name="test.dir" location="test" />
+    <property name="build.dir" location="build" />
+    <property name="reports.dir" location="reports" />
+
+    <path id="classpath">
+        <pathelement location="${lib.dir}/selenium-server-standalone-2.43.1.jar" />
+        <pathelement location="${lib.dir}/junit-4.8.1.jar" />
+    </path>
+        
+    <target name="all" depends="run-tests, clean">
+    </target>
+    
+    <target name="init">
+        <tstamp />
+        <delete dir="${reports.dir}" />
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${reports.dir}" />
+    </target>
+
+    <target name="clean" description="clean up">
+        <delete dir="${build.dir}" />
+    </target>
+
+    <target name="compile-tests" depends="init" description="compile the source">
+        <javac srcdir="${test.dir}" destdir="${build.dir}"  includeantruntime="false" classpathref="classpath"/>
+    </target>
+    
+    <target name="run-tests" depends="compile-tests">
+          <junit printsummary="yes">
+              <classpath>
+                  <pathelement location="${lib.dir}/selenium-server-standalone-2.43.1.jar" />
+                  <pathelement location="${lib.dir}/junit-4.8.1.jar" />  
+                  <pathelement location="${build.dir}"/>
+              </classpath>    
+              <batchtest fork="yes" todir="${reports.dir}">
+                  <fileset dir="${test.dir}">
+                      <include name="AllTests.java" />
+                  </fileset>
+              </batchtest>
+              <formatter type="plain"/>
+              <formatter type="xml"/>
+          </junit>
+    </target>
+</project>
